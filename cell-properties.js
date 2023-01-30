@@ -2,7 +2,6 @@
 
 let sheetDB = [];
 
-
 for (let i = 0; i < rows; i++) {
     let sheetRow = [];
     for (let j = 0; j < cols; j++) {
@@ -15,7 +14,6 @@ for (let i = 0; i < rows; i++) {
             fontSize: "14",
             fontColor: "#000000",
             BGcolor: "#000000",  // Just for indication purpose,
-
         }
         sheetRow.push(cellProp);
     }
@@ -38,6 +36,7 @@ let rightAlign = alignment[2];
 
 let activeColorProp = "#d1d8e0";
 let inactiveColorProp = "#ecf0f1";
+
 
 // Application of two-way binding
 // Attach property listeners
