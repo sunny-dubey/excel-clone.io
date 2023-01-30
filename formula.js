@@ -45,6 +45,4 @@ function SetCellUIAndCellProp(evaluatedValue, formula) {
     // DB update
     cellProp.value = evaluatedValue;
     cellProp.formula = formula;
-
-
 }
