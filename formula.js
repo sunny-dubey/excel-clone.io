@@ -4,24 +4,15 @@ for (let i = 0; i < rows; i++) {
         cell.addEventListener("blur", (e) => {
             let address = addressBar.value;
             let [activeCell, cellProp] = getCellAndCellProp(address);
-            let enteredData = getCellAndCellProp.innerText;
+            let enteredData = activeCell.innerText;
 
             cellProp.value = enteredData;
+            console.log(cellProp);
 
         })
     }
 }
 
-let formulaBar = document.querySelector(".formula-bar");
-formulaBar.addEventListener("keydown", (e) => {
-    let inputFormula = formulaBar.value;
-    if (e.key == "Enter" && inputFormula) {
-        let evaluatedValue = evaluateFormula(inputFormula);
-
-        // To update UI and cellProp in DB
-        SetCellUIAndCellProp(evaluatedValue, inputFormula);
-    }
-})
 
 function evaluateFormula(formula) {
     let encodedFormula = formula.split(" ");
@@ -35,6 +26,18 @@ function evaluateFormula(formula) {
     let decodedFormula = encodedFormula.join(" ");
     return eval(decodedFormula);
 }
+
+let formulaBar = document.querySelector(".formula-bar");
+formulaBar.addEventListener("keydown", (e) => {
+    let inputFormula = formulaBar.value;
+    if (e.key == "Enter" && inputFormula) {
+        let evaluatedValue = evaluateFormula(inputFormula);
+
+        // To update UI and cellProp in DB
+        SetCellUIAndCellProp(evaluatedValue, inputFormula);
+    }
+})
+
 
 function SetCellUIAndCellProp(evaluatedValue, formula) {
     let address = addressBar.value;
