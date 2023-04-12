@@ -1,26 +1,32 @@
 // Storage
-
+let collectedSheetDB = [];  //Contains all SheetDB
 let sheetDB = [];
 
-for (let i = 0; i < rows; i++) {
-    let sheetRow = [];
-    for (let j = 0; j < cols; j++) {
-        let cellProp = {
-            bold: false,
-            italic: false,
-            underline: false,
-            alignment: "left",
-            fontFamily: "monospace",
-            fontSize: "14",
-            fontColor: "#000000",
-            BGcolor: "#000000",  // Just for indication purpose
-            value: "",
-            formula: "",
-        }
-        sheetRow.push(cellProp);
-    }
-    sheetDB.push(sheetRow);
+{
+    let addSheetBtn = document.querySelector(".sheet-add-icon");
+    addSheetBtn.click();
 }
+
+// for (let i = 0; i < rows; i++) {
+//     let sheetRow = [];
+//     for (let j = 0; j < cols; j++) {
+//         let cellProp = {
+//             bold: false,
+//             italic: false,
+//             underline: false,
+//             alignment: "left",
+//             fontFamily: "monospace",
+//             fontSize: "14",
+//             fontColor: "#000000",
+//             BGcolor: "#000000",  // Just for indication purpose,
+//             value: "",
+//             formula: "",
+//             children: [],
+//         }
+//         sheetRow.push(cellProp);
+//     }
+//     sheetDB.push(sheetRow);
+// }
 
 
 // Selectors for cell properties
@@ -39,7 +45,6 @@ let rightAlign = alignment[2];
 let activeColorProp = "#d1d8e0";
 let inactiveColorProp = "#ecf0f1";
 
-
 // Application of two-way binding
 // Attach property listeners
 bold.addEventListener("click", (e) => {
@@ -51,7 +56,6 @@ bold.addEventListener("click", (e) => {
     cell.style.fontWeight = cellProp.bold ? "bold" : "normal"; // UI change (1)
     bold.style.backgroundColor = cellProp.bold ? activeColorProp : inactiveColorProp; // UI change (2)
 })
-
 italic.addEventListener("click", (e) => {
     let address = addressBar.value;
     let [cell, cellProp] = getCellAndCellProp(address);
@@ -61,7 +65,6 @@ italic.addEventListener("click", (e) => {
     cell.style.fontStyle = cellProp.italic ? "italic" : "normal"; // UI change (1)
     italic.style.backgroundColor = cellProp.italic ? activeColorProp : inactiveColorProp; // UI change (2)
 })
-
 underline.addEventListener("click", (e) => {
     let address = addressBar.value;
     let [cell, cellProp] = getCellAndCellProp(address);
@@ -71,7 +74,6 @@ underline.addEventListener("click", (e) => {
     cell.style.textDecoration = cellProp.underline ? "underline" : "none"; // UI change (1)
     underline.style.backgroundColor = cellProp.underline ? activeColorProp : inactiveColorProp; // UI change (2)
 })
-
 fontSize.addEventListener("change", (e) => {
     let address = addressBar.value;
     let [cell, cellProp] = getCellAndCellProp(address);
@@ -80,7 +82,6 @@ fontSize.addEventListener("change", (e) => {
     cell.style.fontSize = cellProp.fontSize + "px";
     fontSize.value = cellProp.fontSize;
 })
-
 fontFamily.addEventListener("change", (e) => {
     let address = addressBar.value;
     let [cell, cellProp] = getCellAndCellProp(address);
@@ -89,7 +90,6 @@ fontFamily.addEventListener("change", (e) => {
     cell.style.fontFamily = cellProp.fontFamily;
     fontFamily.value = cellProp.fontFamily;
 })
-
 fontColor.addEventListener("change", (e) => {
     let address = addressBar.value;
     let [cell, cellProp] = getCellAndCellProp(address);
@@ -98,7 +98,6 @@ fontColor.addEventListener("change", (e) => {
     cell.style.color = cellProp.fontColor;
     fontColor.value = cellProp.fontColor;
 })
-
 BGcolor.addEventListener("change", (e) => {
     let address = addressBar.value;
     let [cell, cellProp] = getCellAndCellProp(address);
@@ -107,7 +106,6 @@ BGcolor.addEventListener("change", (e) => {
     cell.style.backgroundColor = cellProp.BGcolor;
     BGcolor.value = cellProp.BGcolor;
 })
-
 alignment.forEach((alignElem) => {
     alignElem.addEventListener("click", (e) => {
         let address = addressBar.value;
@@ -117,7 +115,7 @@ alignment.forEach((alignElem) => {
         cellProp.alignment = alignValue; // Data change
         cell.style.textAlign = cellProp.alignment; // UI change (1)
 
-        switch (alignValue) { // UI change (2)
+        switch(alignValue) { // UI change (2)
             case "left":
                 leftAlign.style.backgroundColor = activeColorProp;
                 centerAlign.style.backgroundColor = inactiveColorProp;
@@ -141,7 +139,7 @@ alignment.forEach((alignElem) => {
 
 
 let allCells = document.querySelectorAll(".cell");
-for (let i = 0; i < allCells.length; i++) {
+for (let i = 0;i < allCells.length;i++) {
     addListenerToAttachCellProperties(allCells[i]);
 }
 
@@ -161,7 +159,7 @@ function addListenerToAttachCellProperties(cell) {
         cell.style.color = cellProp.fontColor;
         cell.style.backgroundColor = cellProp.BGcolor === "#000000" ? "transparent" : cellProp.BGcolor;
         cell.style.textAlign = cellProp.alignment;
-
+                
 
         // Apply properties UI Props container
         bold.style.backgroundColor = cellProp.bold ? activeColorProp : inactiveColorProp;
@@ -171,7 +169,7 @@ function addListenerToAttachCellProperties(cell) {
         BGcolor.value = cellProp.BGcolor;
         fontSize.value = cellProp.fontSize;
         fontFamily.value = cellProp.fontFamily;
-        switch (cellProp.alignment) { // UI change (2)
+        switch(cellProp.alignment) { // UI change (2)
             case "left":
                 leftAlign.style.backgroundColor = activeColorProp;
                 centerAlign.style.backgroundColor = inactiveColorProp;
@@ -189,7 +187,9 @@ function addListenerToAttachCellProperties(cell) {
                 break;
         }
 
-
+        let formulaBar = document.querySelector(".formula-bar");
+        formulaBar.value = cellProp.formula;
+        cell.innerText = cellProp.value;
     })
 }
 
@@ -207,4 +207,3 @@ function decodeRIDCIDFromAddress(address) {
     let cid = Number(address.charCodeAt(0)) - 65; // "A" -> 65
     return [rid, cid];
 }
-
